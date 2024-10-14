@@ -1,6 +1,11 @@
 package org.example;
 
+import org.jgrapht.*;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedMultigraph;
+
 import java.util.Scanner;
+
 
 /**
  * Hello world!
@@ -10,6 +15,9 @@ public class App
 {
     public static void main( String[] args )
     {
+        //Creation of Graph for later use
+        Graph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
+
         //Keyboard input from user
         Scanner scanner = new Scanner(System.in);
 
@@ -68,6 +76,15 @@ public class App
 
 
 
+
+    public void importDOT (String filePath) {
+
+
+    }
+
+
+
+    //Function to print User Menu
     public static void printCommandOptions() {
                 System.out.println("Command Line Options: \n" +
                 "\tA: Import graph from .DOT file\n" +
