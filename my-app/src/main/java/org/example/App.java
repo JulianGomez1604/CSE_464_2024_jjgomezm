@@ -3,20 +3,20 @@ package org.example;
 import org.jgrapht.*;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.nio.ExportException;
 import org.jgrapht.nio.ImportException;
+import org.jgrapht.nio.dot.DOTExporter;
 import org.jgrapht.nio.dot.DOTImporter;
 
+import java.awt.*;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-
-/**
- * Hello world!
- *
- */
 public class App 
 {
+
     public static void main( String[] args )
     {
         //Creation of Graph for later use
@@ -43,23 +43,18 @@ public class App
                     System.out.println("Please input your file path:\n");
                     userInput = scanner.nextLine();
 
-                    // Logic for importing graph from .DOT file
-                    //--------------------------------------------------
+                    parseGraph(userInput, graph);
 
-                    //Create Importer for file
-                    DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
+                    //prompt for printing graph in either string format or into updated dot file
+                    System.out.println("Your graph has been output into an updated file" +
+                                        " and here is a string version.\n" +
+                                        "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
+                                        "(vertex1, vertex2) == vertex1 -> vertex2\n");
+                    System.out.println(graph + "\n");
 
-                    //Sets how the vertices will be created based on a regex
-                    importer.setVertexFactory(label -> label);
+                    //file output
+                    writeGraphToFile(graph);
 
-                    //Read file and parse
-                    try (FileReader fr = new FileReader(userInput)){
-                        importer.importGraph(graph, fr);
-                    } catch (ImportException | IOException e) {
-                        System.out.println("Failed to import from file. Please check file path.");
-                    }
-
-                    System.out.println("Your file has been imported.");
                     break;
 
                 case "B":
@@ -95,13 +90,39 @@ public class App
     }
 
 
+    // Logic for importing graph from .DOT file
+    public static void parseGraph(String filePath, Graph<String, DefaultEdge> gr) {
 
+        //Create Importer for file
+        DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
 
-    public void importDOT (String filePath) {
+        //Sets how the vertices will be created based on a regex
+        importer.setVertexFactory(label -> label);
 
+        //Read file and parse
+        try (FileReader fr = new FileReader(filePath)){
+            importer.importGraph(gr, fr);
+        } catch (ImportException | IOException e) {
+            System.out.println("Failed to import from file. Please check file path.\n");
+        }
 
+        System.out.println("Your file has been imported.\n");
     }
 
+    //Logic for exporting graph to file
+    public static void writeGraphToFile(Graph<String, DefaultEdge> gr){
+        System.out.println("Enters export function");
+        //Exporter for graph
+        DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(v -> v);
+
+        //Exporting to file using FileWriter
+        try (FileWriter writer = new FileWriter("src/outputs/updatedGraph.dot")) {
+            exporter.exportGraph(gr, writer);
+        } catch (ExportException | IOException e) {
+            System.out.println("Failed to export to file. Please check file path.");
+        }
+
+    }
 
 
     //Function to print User Menu
