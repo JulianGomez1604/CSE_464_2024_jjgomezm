@@ -2,7 +2,6 @@ package org.example;
 
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.model.Factory;
 import org.jgrapht.*;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
@@ -11,8 +10,6 @@ import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.dot.DOTExporter;
 import org.jgrapht.nio.dot.DOTImporter;
 
-
-import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -176,7 +173,7 @@ public class App
         //Removing all white space
         String modified = nodes.replaceAll("\\s","");
 
-        //Parsing input with delimter of ","
+        //Parsing input with every appearance of ","
         String[] items = modified.split(",");
 
         for (String node : items) {
@@ -198,8 +195,6 @@ public class App
 
             File dotFile = new File(fP.toString());
             File pngFile = new File("src/outputs/graphics/graph.png");
-
-            String command = "dot -Tpng " + dotFile.getAbsolutePath() + " -o " + pngFile.getAbsolutePath();
 
             try {
 
