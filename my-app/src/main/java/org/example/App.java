@@ -78,7 +78,7 @@ public class App
                 case "E":
                     System.out.println("You chose: Export graph into .DOT file");
                     // Logic for exporting graph into a .DOT file
-                    writeGraphToFile(graph);
+                    outputGraph(graph);
                     System.out.println("Your graph has been exported into a .DOT file.\n------------------------------");
                     break;
 
@@ -118,7 +118,7 @@ public class App
     }
 
     //Logic for exporting graph to file
-    public static void writeGraphToFile(Graph<String, DefaultEdge> gr){
+    public static void outputGraph(Graph<String, DefaultEdge> gr){
         //Exporter for graph
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(v -> v);
 
