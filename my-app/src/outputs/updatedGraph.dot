@@ -1,8 +1,2 @@
 digraph G {
-  Hello;
-  Bye;
-  Cheese;
-  Burger;
-  Hello -> Bye;
-  Cheese -> Burger;
 }

@@ -1,5 +1,8 @@
 package org.example;
 
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.Factory;
 import org.jgrapht.*;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
@@ -8,11 +11,18 @@ import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.dot.DOTExporter;
 import org.jgrapht.nio.dot.DOTImporter;
 
+
 import java.awt.*;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
+
+
 
 public class App 
 {
@@ -92,8 +102,14 @@ public class App
                     break;
 
                 case "D":
-                    System.out.println("You chose: Export graph into image");
-                    // Logic for exporting graph into an image
+                    System.out.println("You chose: Export graph into image\n");
+
+
+                    System.out.println("Enter file path to .DOT file: ");
+                    userInput = scanner.nextLine();
+
+                    outputGraphics(userInput);
+
                     break;
 
                 case "E":
@@ -171,6 +187,34 @@ public class App
         }
 
         System.out.println("Node(s) have been added.\n");
+    }
+
+    public static void outputGraphics(String filePath) {
+        //checks if file exists
+        Path fP = Paths.get(filePath);
+
+        if (Files.exists(fP) && Files.isRegularFile(fP)) {
+            System.out.println("File Found!");
+
+            File dotFile = new File(fP.toString());
+            File pngFile = new File("src/outputs/graphics/graph.png");
+
+            String command = "dot -Tpng " + dotFile.getAbsolutePath() + " -o " + pngFile.getAbsolutePath();
+
+            try {
+
+                Graphviz.fromFile(dotFile).width(700).render(Format.PNG).toFile(pngFile);
+                //Graphviz.fromGraph(graph).width(700).render(Format.PNG).toFile(pngFile);
+
+                System.out.println("PNG file generated successfully: " + pngFile.getAbsolutePath());
+            } catch (IOException e) {
+                System.out.println("Something went wrong went exporting to graphics.");
+            }
+
+        } else  {
+            System.out.println("File not Found.");
+        }
+
     }
 
     //Function to print User Menu
