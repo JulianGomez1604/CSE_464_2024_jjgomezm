@@ -1,11 +1,8 @@
 digraph G {
-  A;
-  B;
-  C;
-  D;
-  A -> B;
-  B -> C;
-  C -> A;
-  A -> D;
-  D -> C;
+  m;
+  v;
+  b;
+  hello;
+  bye;
+  j;
 }

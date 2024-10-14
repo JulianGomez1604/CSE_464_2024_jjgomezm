@@ -46,20 +46,23 @@ public class App
                     parseGraph(userInput, graph);
 
                     //prompt for printing graph in either string format or into updated dot file
-                    System.out.println("Your graph has been output into an updated file" +
-                                        " and here is a string version.\n" +
+                    System.out.println("Your graph has been output as a string.\n" +
                                         "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
                                         "(vertex1, vertex2) == vertex1 -> vertex2\n");
-                    System.out.println(graph + "\n");
-
-                    //file output
-                    writeGraphToFile(graph);
+                    System.out.println(graph + "\n" +
+                            "Number of Nodes: " + graph.vertexSet().size() +"\n------------------------------");
 
                     break;
 
                 case "B":
-                    System.out.println("You chose: Add node to graph");
-                    // Logic for adding a node to the graph
+                    //prompt for input
+                    System.out.println("You chose: Add node(s) to the graph.\n " +
+                                        "Please enter a comma separated list node1, node2,.... \n");
+
+                    //Save user input
+                    userInput = scanner.nextLine();
+
+                    addNode(graph, userInput);
                     break;
 
                 case "C":
@@ -75,6 +78,8 @@ public class App
                 case "E":
                     System.out.println("You chose: Export graph into .DOT file");
                     // Logic for exporting graph into a .DOT file
+                    writeGraphToFile(graph);
+                    System.out.println("Your graph has been exported into a .DOT file.\n------------------------------");
                     break;
 
                 case "Q":
@@ -84,6 +89,9 @@ public class App
 
                 default:
                     System.out.println("Invalid option. Please try again.");
+            }
+            if (!userInput.equalsIgnoreCase("q")){
+                printCommandOptions();
             }
         }
         scanner.close();
@@ -111,7 +119,6 @@ public class App
 
     //Logic for exporting graph to file
     public static void writeGraphToFile(Graph<String, DefaultEdge> gr){
-        System.out.println("Enters export function");
         //Exporter for graph
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(v -> v);
 
@@ -124,6 +131,26 @@ public class App
 
     }
 
+    //Logic for adding a node
+    //NOTE: duplicates are taken care of by library
+    public static void addNode(Graph<String, DefaultEdge> gr, String nodes) {
+        //Assume format for node list to be comma separated list
+
+        //Removing all white space
+        String modified = nodes.replaceAll("\\s","");
+
+        //Parsing input with delimter of ","
+        String[] items = modified.split(",");
+
+        for (String node : items) {
+            if (node.isEmpty()) {
+                break;
+            }
+            gr.addVertex(node);
+        }
+
+        System.out.println("Node(s) have been added.\n");
+    }
 
     //Function to print User Menu
     public static void printCommandOptions() {
