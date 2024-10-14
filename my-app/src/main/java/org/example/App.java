@@ -66,8 +66,29 @@ public class App
                     break;
 
                 case "C":
-                    System.out.println("You chose: Add edge to graph");
+                    System.out.println("You chose: Add edge to graph. \n");
+                    System.out.println("Please enter the edge in the following order A -> B. (You will prompted for two inputs.\n");
+
+                    System.out.println("Please enter A:");
+                    String vertexA = scanner.nextLine();
+
+                    System.out.println("\nPlease enter B:");
+                    String vertexB = scanner.nextLine();
+
+                    if(!graph.containsVertex(vertexA)) {
+                        System.out.println("Vertex " + vertexA + " does not exist and has been added.");
+                        graph.addVertex(vertexA);
+                    }
+
+                    if(!graph.containsVertex(vertexB)) {
+                        System.out.println("Vertex " + vertexB + " does not exist and has been added.\n");
+                        graph.addVertex(vertexB);
+                    }
+
+                    System.out.println("Your edge has been added to the graph.\n------------------------------");
+                    graph.addEdge(vertexA,vertexB);
                     // Logic for adding an edge to the graph
+
                     break;
 
                 case "D":
