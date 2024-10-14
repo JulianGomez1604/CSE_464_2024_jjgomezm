@@ -3,7 +3,11 @@ package org.example;
 import org.jgrapht.*;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.nio.ImportException;
+import org.jgrapht.nio.dot.DOTImporter;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 
@@ -24,10 +28,10 @@ public class App
         //control variable for command loop
         boolean running = true;
 
-        while (running) {
 
-            //print options for user to select from
-            printCommandOptions();
+        printCommandOptions();
+
+        while (running) {
 
             //Prompt user for input and reads the input
             System.out.println("Please select an option:");
@@ -35,8 +39,27 @@ public class App
 
             switch (userInput) {
                 case "A":
-                    System.out.println("You chose: Import graph from .DOT file");
+                    //prompt for file path and store
+                    System.out.println("Please input your file path:\n");
+                    userInput = scanner.nextLine();
+
                     // Logic for importing graph from .DOT file
+                    //--------------------------------------------------
+
+                    //Create Importer for file
+                    DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
+
+                    //Sets how the vertices will be created based on a regex
+                    importer.setVertexFactory(label -> label);
+
+                    //Read file and parse
+                    try (FileReader fr = new FileReader(userInput)){
+                        importer.importGraph(graph, fr);
+                    } catch (ImportException | IOException e) {
+                        System.out.println("Failed to import from file. Please check file path.");
+                    }
+
+                    System.out.println("Your file has been imported.");
                     break;
 
                 case "B":
@@ -68,9 +91,6 @@ public class App
                     System.out.println("Invalid option. Please try again.");
             }
         }
-
-        printCommandOptions();
-
         scanner.close();
     }
 
