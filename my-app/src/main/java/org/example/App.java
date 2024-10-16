@@ -50,7 +50,7 @@ public class App
                     System.out.println("Please input your file path:\n");
                     userInput = scanner.nextLine();
 
-                    parseGraph(userInput, graph);
+                    System.out.println(parseGraph(userInput, graph));
 
                     //prompt for printing graph in either string format or into updated dot file
                     System.out.println("Your graph has been output as a string.\n" +
@@ -69,7 +69,8 @@ public class App
                     //Save user input
                     userInput = scanner.nextLine();
 
-                    addNode(graph, userInput);
+                    System.out.println(addNode(graph, userInput));
+
                     break;
 
                 case "C":
@@ -105,15 +106,15 @@ public class App
                     System.out.println("Enter file path to .DOT file: ");
                     userInput = scanner.nextLine();
 
-                    outputGraphics(userInput);
+                    System.out.println(outputGraphics(userInput));
 
                     break;
 
                 case "E":
                     System.out.println("You chose: Export graph into .DOT file");
                     // Logic for exporting graph into a .DOT file
-                    outputGraph(graph);
-                    System.out.println("Your graph has been exported into a .DOT file.\n------------------------------");
+                    System.out.println(outputDOTGraph(graph));
+
                     break;
 
                 case "Q":
@@ -133,7 +134,7 @@ public class App
 
 
     // Logic for importing graph from .DOT file
-    public static void parseGraph(String filePath, Graph<String, DefaultEdge> gr) {
+    public static String parseGraph(String filePath, Graph<String, DefaultEdge> gr) {
 
         //Create Importer for file
         DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
@@ -145,30 +146,35 @@ public class App
         try (FileReader fr = new FileReader(filePath)){
             importer.importGraph(gr, fr);
         } catch (ImportException | IOException e) {
-            System.out.println("Failed to import from file. Please check file path.\n");
+            return("Failed to import from file. Please check file path.\n");
         }
 
-        System.out.println("Your file has been imported.\n");
+        return("Your file has been imported.\n");
     }
 
     //Logic for exporting graph to file
-    public static void outputGraph(Graph<String, DefaultEdge> gr){
+    public static String outputDOTGraph(Graph<String, DefaultEdge> gr){
         //Exporter for graph
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(v -> v);
 
         //Exporting to file using FileWriter
         try (FileWriter writer = new FileWriter("src/outputs/updatedGraph.dot")) {
             exporter.exportGraph(gr, writer);
+            return "Exported file successfully!";
         } catch (ExportException | IOException e) {
-            System.out.println("Failed to export to file. Please check file path.");
+            return ("Failed to export to file. Please check file path.");
         }
 
     }
 
     //Logic for adding a node
     //NOTE: duplicates are taken care of by library
-    public static void addNode(Graph<String, DefaultEdge> gr, String nodes) {
+    public static String addNode(Graph<String, DefaultEdge> gr, String nodes) {
         //Assume format for node list to be comma separated list
+
+        if (nodes.isEmpty()){
+            return "No input given.\n";
+        }
 
         //Removing all white space
         String modified = nodes.replaceAll("\\s","");
@@ -180,13 +186,18 @@ public class App
             if (node.isEmpty()) {
                 break;
             }
-            gr.addVertex(node);
+            try {
+                gr.addVertex(node);
+
+            } catch (Exception e) {
+                return "Failed to add node.";
+            }
         }
 
-        System.out.println("Node(s) have been added.\n");
+        return("Node(s) have been added.\n");
     }
 
-    public static void outputGraphics(String filePath) {
+    public static String outputGraphics(String filePath) {
         //checks if file exists
         Path fP = Paths.get(filePath);
 
@@ -201,13 +212,13 @@ public class App
                 Graphviz.fromFile(dotFile).width(700).render(Format.PNG).toFile(pngFile);
                 //Graphviz.fromGraph(graph).width(700).render(Format.PNG).toFile(pngFile);
 
-                System.out.println("PNG file generated successfully: " + pngFile.getAbsolutePath());
+                return("PNG file generated successfully!");
             } catch (IOException e) {
-                System.out.println("Something went wrong went exporting to graphics.");
+                return("Something went wrong when exporting to graphics.");
             }
 
         } else  {
-            System.out.println("File not Found.");
+            return("File not Found.");
         }
 
     }

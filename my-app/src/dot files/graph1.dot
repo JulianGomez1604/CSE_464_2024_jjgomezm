@@ -1,4 +1,4 @@
-digraph G {
+digraph graph1 {
     A -> B;
     B -> C;
     C -> A;
