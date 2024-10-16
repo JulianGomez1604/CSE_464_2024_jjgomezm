@@ -83,19 +83,7 @@ public class App
                     System.out.println("\nPlease enter B:");
                     String vertexB = scanner.nextLine();
 
-                    if(!graph.containsVertex(vertexA)) {
-                        System.out.println("Vertex " + vertexA + " does not exist and has been added.");
-                        graph.addVertex(vertexA);
-                    }
-
-                    if(!graph.containsVertex(vertexB)) {
-                        System.out.println("Vertex " + vertexB + " does not exist and has been added.\n");
-                        graph.addVertex(vertexB);
-                    }
-
-                    System.out.println("Your edge has been added to the graph.\n------------------------------");
-                    graph.addEdge(vertexA,vertexB);
-                    // Logic for adding an edge to the graph
+                    addEdgeToGraph(vertexA, vertexB, graph);
 
                     break;
 
@@ -221,6 +209,27 @@ public class App
             return("File not Found.");
         }
 
+    }
+
+    public static String addEdgeToGraph(String vA, String vB, Graph<String, DefaultEdge> gr) {
+
+        if (vA.isEmpty() || vB.isEmpty()) {
+            return "One of the two inputs is empty please try again.\n";
+        }
+
+        if(!gr.containsVertex(vA)) {
+            System.out.println("Vertex " + vA + " does not exist and has been added.");
+            gr.addVertex(vA);
+        }
+
+        if(!gr.containsVertex(vB)) {
+            System.out.println("Vertex " + vB + " does not exist and has been added.\n");
+            gr.addVertex(vB);
+        }
+
+        gr.addEdge(vA,vB);
+        return ("Your edge has been added to the graph.\n");
+        // Logic for adding an edge to the graph
     }
 
     //Function to print User Menu
