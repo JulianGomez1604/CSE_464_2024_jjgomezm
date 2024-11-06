@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: Switch to correct directory
-      run: cd my-app
+      run: cd my-app/
     - uses: actions/checkout@v2
     - name: Set up JDK 18
       uses: actions/setup-java@v2
