@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: cd my-app && mvn package
+      run: cd my-app && mvn -X package
 
     - name: Run Maven Test
       run: mvn -Dtest=testFirstFeature,testSecondFeature,testThirdFeature,testFourthFeature,testPart2 test
