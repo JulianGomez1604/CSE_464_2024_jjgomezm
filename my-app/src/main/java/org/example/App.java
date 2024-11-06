@@ -52,13 +52,6 @@ public class App
 
                     System.out.println(parseGraph(userInput, graph));
 
-                    //prompt for printing graph in either string format or into updated dot file
-                    System.out.println("Your graph has been output as a string.\n" +
-                                        "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
-                                        "(vertex1, vertex2) == vertex1 -> vertex2\n");
-                    System.out.println(graph + "\n" +
-                            "Number of Nodes: " + graph.vertexSet().size() +"\n------------------------------");
-
                     break;
 
                 case "B":
@@ -83,7 +76,8 @@ public class App
                     System.out.println("\nPlease enter B:");
                     String vertexB = scanner.nextLine();
 
-                    addEdgeToGraph(vertexA, vertexB, graph);
+                    System.out.println(addEdgeToGraph(vertexA, vertexB, graph));
+
 
                     break;
 
@@ -105,6 +99,10 @@ public class App
 
                     break;
 
+                case "F":
+                    printGraphInfo(graph);
+                    break;
+
                 case "Q":
                     System.out.println("Exiting program...");
                     running = false; // Set running = false to exit loop
@@ -120,6 +118,13 @@ public class App
         scanner.close();
     }
 
+    public static void printGraphInfo(Graph<String, DefaultEdge> gr) {
+        System.out.println(
+                "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
+                "(vertex1, vertex2) == vertex1 -> vertex2\n");
+        System.out.println(gr + "\n" +
+                "Number of Nodes: " + gr.vertexSet().size() +"\n------------------------------\n");
+    }
 
     // Logic for importing graph from .DOT file
     public static String parseGraph(String filePath, Graph<String, DefaultEdge> gr) {
@@ -240,6 +245,7 @@ public class App
                 "\tC: Add edge to graph\n" +
                 "\tD: Export graph into image\n" +
                 "\tE: Export graph into .DOT file\n" +
+                "\tF: Print Graph String Format\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
