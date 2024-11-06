@@ -103,6 +103,14 @@ public class App
                     printGraphInfo(graph);
                     break;
 
+                case "G":
+                    System.out.println("Enter a node to be removed:\n");
+                    userInput = scanner.nextLine();
+
+                    System.out.println(removeNode(userInput,graph));
+
+                    break;
+
                 case "Q":
                     System.out.println("Exiting program...");
                     running = false; // Set running = false to exit loop
@@ -118,6 +126,7 @@ public class App
         scanner.close();
     }
 
+    //print function for graphs
     public static void printGraphInfo(Graph<String, DefaultEdge> gr) {
         System.out.println(
                 "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
@@ -143,6 +152,25 @@ public class App
         }
 
         return("Your file has been imported.\n");
+    }
+
+    public static String removeNode(String label, Graph<String, DefaultEdge> gr) {
+        boolean removed = false;
+        String result = "";
+
+        try {
+            removed = gr.removeVertex(label);
+
+            if (removed) {
+                result = "Node " + label + " has been successfully removed.\n";
+            } else {
+                result = "Node " + label + " does not exist in the graph\n";
+            }
+        } catch (IllegalArgumentException e) {
+            result = "Failed to remove node '" + label + "'. Please ensure the node is present in the graph.\n";
+        }
+
+        return result;
     }
 
     //Logic for exporting graph to file
@@ -246,6 +274,7 @@ public class App
                 "\tD: Export graph into image\n" +
                 "\tE: Export graph into .DOT file\n" +
                 "\tF: Print Graph String Format\n" +
+                "\tG: Remove Single Node\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
