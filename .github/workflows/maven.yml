@@ -30,4 +30,5 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file my-app/pom.xml
     - name: Run Test Cases
+      working-directory: my-app
       run: mvn -Dtest=testFirstFeature,testSecondFeature,testThirdFeature,testFourthFeature,testPart2 tes
