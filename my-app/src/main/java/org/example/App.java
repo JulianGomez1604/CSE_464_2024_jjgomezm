@@ -68,7 +68,7 @@ public class App
 
                 case "C":
                     System.out.println("You chose: Add edge to graph. \n");
-                    System.out.println("Please enter the edge in the following order A -> B. (You will prompted for two inputs.\n");
+                    System.out.println("Please enter the edge in the following order A -> B. (You will prompted for two inputs)\n");
 
                     System.out.println("Please enter A:");
                     String vertexA = scanner.nextLine();
@@ -124,6 +124,18 @@ public class App
 
                     System.out.println(removeNodes(items, graph));
 
+                    break;
+
+                case "I":
+                    System.out.println("Please enter the edge in the following order A -> B to be removed. (You will prompted for two inputs)\n");
+
+                    System.out.println("Please enter A:");
+                    String vA = scanner.nextLine();
+
+                    System.out.println("\nPlease enter B:");
+                    String vB = scanner.nextLine();
+
+                    System.out.println(removeEdge(vA, vB, graph));
                     break;
 
                 case "Q":
@@ -201,6 +213,33 @@ public class App
         }
 
         return result.toString();
+    }
+
+    public static String removeEdge(String srcLabel, String dstLabel, Graph<String, DefaultEdge> gr) {
+
+        if (srcLabel.isEmpty() && dstLabel.isEmpty()) {
+            return "Both labels are empty please try again.\n";
+        }
+
+        if (srcLabel.isEmpty()) {
+            return "Source Label is empty please try again.\n";
+        }
+
+        if (dstLabel.isEmpty()) {
+            return "Destination Label is empty please try again.\n";
+        }
+
+        try {
+            DefaultEdge edge = gr.getEdge(srcLabel, dstLabel);
+            if (edge != null) {
+                gr.removeEdge(edge);
+                return "Successfully removed edge between " + srcLabel + " " + " and " + dstLabel + ".\n";
+            } else {
+                return "Edge between " + srcLabel + " and " + dstLabel + " does not exist.\n";
+            }
+        } catch (IllegalArgumentException e) {
+            return "An error occurred while removing an edge.\n";
+        }
     }
 
     //Logic for exporting graph to file
@@ -306,6 +345,7 @@ public class App
                 "\tF: Print Graph String Format\n" +
                 "\tG: Remove Single Node\n" +
                 "\tH: Remove Multiple Node\n" +
+                "\tI: Remove Edge\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
