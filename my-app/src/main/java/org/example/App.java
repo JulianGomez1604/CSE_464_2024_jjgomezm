@@ -111,6 +111,21 @@ public class App
 
                     break;
 
+                case "H":
+                    System.out.println("Enter a list of nodes in a comma separated format:\n"
+                                        + "e.g  N1, N2, N3, ...\n");
+                    userInput = scanner.nextLine();
+
+                    //Removing all white space
+                    String modified = userInput.replaceAll("\\s","");
+
+                    //Parsing input with every appearance of ","
+                    String[] items = modified.split(",");
+
+                    System.out.println(removeNodes(items, graph));
+
+                    break;
+
                 case "Q":
                     System.out.println("Exiting program...");
                     running = false; // Set running = false to exit loop
@@ -158,6 +173,10 @@ public class App
         boolean removed = false;
         String result = "";
 
+        if (label.isEmpty()) {
+            return "No input has been given.";
+        }
+
         try {
             removed = gr.removeVertex(label);
 
@@ -171,6 +190,17 @@ public class App
         }
 
         return result;
+    }
+
+    public static String removeNodes(String[] label, Graph<String, DefaultEdge> gr) {
+
+        StringBuilder result = new StringBuilder();
+
+        for (String node : label) {
+            result.append(removeNode(node, gr));
+        }
+
+        return result.toString();
     }
 
     //Logic for exporting graph to file
@@ -275,6 +305,7 @@ public class App
                 "\tE: Export graph into .DOT file\n" +
                 "\tF: Print Graph String Format\n" +
                 "\tG: Remove Single Node\n" +
+                "\tH: Remove Multiple Node\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
