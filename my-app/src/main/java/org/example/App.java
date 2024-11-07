@@ -3,12 +3,14 @@ package org.example;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import org.jgrapht.*;
+import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.nio.ExportException;
 import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.dot.DOTExporter;
 import org.jgrapht.nio.dot.DOTImporter;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,11 +19,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.*;
 
 
-
-public class App 
+public class App
 {
 
     public static void main( String[] args )
@@ -138,6 +139,18 @@ public class App
                     System.out.println(removeEdge(vA, vB, graph));
                     break;
 
+                case "J":
+                    System.out.println("Please enter the nodes in which you want to find the path to using DFS: (You will be prompted for two inputs)\n");
+
+                    System.out.println("Please enter the src node:");
+                    Node srcNode = new Node(scanner.nextLine());
+
+                    System.out.println("Please enter dst node:");
+                    Node dstNode = new Node(scanner.nextLine());
+
+                    System.out.println(GraphSearch(srcNode, dstNode, graph).toString());
+                    break;
+
                 case "Q":
                     System.out.println("Exiting program...");
                     running = false; // Set running = false to exit loop
@@ -151,6 +164,25 @@ public class App
             }
         }
         scanner.close();
+    }
+
+    //Implementing BFS with path return
+    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+        CustomPath path = new CustomPath();
+
+        DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
+
+        while (dfsIterator.hasNext()) {
+            String currentNode = dfsIterator.next();
+            path.addNode(new Node(currentNode));
+
+            // If the goal node is reached, break out
+            if (currentNode.equals(dst.getLabel())) {
+                return path;
+            }
+        }
+
+        return path;
     }
 
     //print function for graphs
@@ -346,6 +378,7 @@ public class App
                 "\tG: Remove Single Node\n" +
                 "\tH: Remove Multiple Node\n" +
                 "\tI: Remove Edge\n" +
+                "\tJ: Find Path using DFS\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
