@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Path {
+public class CustomPath {
     private List<Node> nodeList;
 
-    public Path() {
+    public CustomPath() {
         this.nodeList = new ArrayList<Node>();
     }
 
