@@ -10,6 +10,7 @@ import org.jgrapht.nio.ExportException;
 import org.jgrapht.nio.ImportException;
 import org.jgrapht.nio.dot.DOTExporter;
 import org.jgrapht.nio.dot.DOTImporter;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.io.File;
 import java.io.FileReader;
@@ -18,13 +19,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Scanner;
+
+import java.util.*;
 
 
 
-public class App 
+public class App
 {
+    enum Algo {
+        BFS,
+        DFS
+    }
 
     public static void main( String[] args )
     {
@@ -37,6 +42,7 @@ public class App
         //control variable for command loop
         boolean running = true;
 
+    
 
         printCommandOptions();
 
@@ -141,7 +147,8 @@ public class App
                     break;
 
                 case "J":
-                    System.out.println("Please enter the nodes in which you want to find the path to using BFS: (You will be prompted for two inputs)\n");
+
+                    System.out.println("Please enter the nodes in which you want to find the path to: (You will be prompted for two inputs and select the algorithm)\n");
 
                     System.out.println("Please enter the src node:");
                     Node srcNode = new Node(scanner.nextLine());
@@ -149,7 +156,16 @@ public class App
                     System.out.println("Please enter dst node:");
                     Node dstNode = new Node(scanner.nextLine());
 
-                    System.out.println(GraphSearch(srcNode, dstNode, graph).toString());
+                    System.out.println("Choose an algorithm to search for the path BFS(1) or DFS(2):");
+                    String algorithmChoice = scanner.nextLine();
+
+                    if (algorithmChoice.equals("1")) {
+                        System.out.println(GraphSearch(srcNode, dstNode, graph, Algo.BFS).toString());
+                    }else if (algorithmChoice.equals("2")) {
+                        System.out.println(GraphSearch(srcNode, dstNode, graph, Algo.DFS).toString());
+                    } else {
+                        System.out.println("Please enter a one of two algorithm choices.");
+                    }
                     break;
 
                 case "Q":
@@ -168,17 +184,34 @@ public class App
     }
 
     //Implementing BFS with path return
-    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr, Algo choice) {
         CustomPath path = new CustomPath();
 
-        //Instantiate object for BFS
-        BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
+        if (choice == Algo.BFS) {
+            //Instantiate object for BFS
+            BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
 
-        //Give me path in form of a list
-        List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
+            //Give me path in form of a list
+            List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
 
-        for (String item : pathToDST) {
-            path.addNode(new Node(item));
+            for (String item : pathToDST) {
+                path.addNode(new Node(item));
+            }
+        }
+            
+        if (choice == Algo.DFS) {
+            DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
+    
+            while (dfsIterator.hasNext()) {
+                String currentNode = dfsIterator.next();
+                path.addNode(new Node(currentNode));
+    
+                // If the goal node is reached, break out
+                if (currentNode.equals(dst.getLabel())) {
+                    return path;
+                }
+            
+        }
         }
 
         return path;
@@ -377,7 +410,7 @@ public class App
                 "\tG: Remove Single Node\n" +
                 "\tH: Remove Multiple Node\n" +
                 "\tI: Remove Edge\n" +
-                "\tJ: Find Path using BFS\n" +
+                "\tJ: Find Path using BFS or DFS\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
