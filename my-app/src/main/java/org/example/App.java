@@ -377,6 +377,7 @@ public class App
                 "\tG: Remove Single Node\n" +
                 "\tH: Remove Multiple Node\n" +
                 "\tI: Remove Edge\n" +
+                "\tJ: Find Path using BFS\n" +
                 "\tQ: Quit Program\n\n");
     }
 }
