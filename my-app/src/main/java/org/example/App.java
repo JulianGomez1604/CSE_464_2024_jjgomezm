@@ -3,7 +3,6 @@ package org.example;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import org.jgrapht.*;
-import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.nio.ExportException;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
 
@@ -140,18 +138,6 @@ public class App
                     System.out.println(removeEdge(vA, vB, graph));
                     break;
 
-                case "J":
-                    System.out.println("Please enter the nodes in which you want to find the path to using BFS: (You will be prompted for two inputs)\n");
-
-                    System.out.println("Please enter the src node:");
-                    Node srcNode = new Node(scanner.nextLine());
-
-                    System.out.println("Please enter dst node:");
-                    Node dstNode = new Node(scanner.nextLine());
-
-                    System.out.println(GraphSearch(srcNode, dstNode, graph).toString());
-                    break;
-
                 case "Q":
                     System.out.println("Exiting program...");
                     running = false; // Set running = false to exit loop
@@ -165,23 +151,6 @@ public class App
             }
         }
         scanner.close();
-    }
-
-    //Implementing BFS with path return
-    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr) {
-        CustomPath path = new CustomPath();
-
-        //Instantiate object for BFS
-        BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
-
-        //Give me path in form of a list
-        List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
-
-        for (String item : pathToDST) {
-            path.addNode(new Node(item));
-        }
-
-        return path;
     }
 
     //print function for graphs
