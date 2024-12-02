@@ -400,17 +400,20 @@ public class App
 
     //Function to print User Menu
     public static void printCommandOptions() {
-                System.out.println("Command Line Options: \n" +
-                "\tA: Import graph from .DOT file\n" +
-                "\tB: Add node to graph\n" +
-                "\tC: Add edge to graph\n" +
-                "\tD: Export graph into image\n" +
-                "\tE: Export graph into .DOT file\n" +
-                "\tF: Print Graph String Format\n" +
-                "\tG: Remove Single Node\n" +
-                "\tH: Remove Multiple Node\n" +
-                "\tI: Remove Edge\n" +
-                "\tJ: Find Path using BFS or DFS\n" +
-                "\tQ: Quit Program\n\n");
+                System.out.println("""
+                        Command Line Options:\s
+                        \tA: Import graph from .DOT file
+                        \tB: Add node to graph
+                        \tC: Add edge to graph
+                        \tD: Export graph into image
+                        \tE: Export graph into .DOT file
+                        \tF: Print Graph String Format
+                        \tG: Remove Single Node
+                        \tH: Remove Multiple Node
+                        \tI: Remove Edge
+                        \tJ: Find Path using BFS or DFS
+                        \tQ: Quit Program
+                        
+                        """);
     }
 }
