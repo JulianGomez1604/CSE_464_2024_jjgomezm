@@ -220,8 +220,11 @@ public class App
     //print function for graphs
     public static void printGraphInfo(Graph<String, DefaultEdge> gr) {
         System.out.println(
-                "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
-                "(vertex1, vertex2) == vertex1 -> vertex2\n");
+                """
+                        Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)]) \s
+                         \
+                        (vertex1, vertex2) == vertex1 -> vertex2
+                        """);
         System.out.println(gr + "\n" +
                 "Number of Nodes: " + gr.vertexSet().size() +"\n------------------------------\n");
     }
