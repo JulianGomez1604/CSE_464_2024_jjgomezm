@@ -58,7 +58,7 @@ public class App
                     System.out.println("Please input your file path:\n");
                     userInput = scanner.nextLine();
 
-                    System.out.println(parseGraph(userInput, graph));
+                    System.out.println(importGraph(userInput, graph));
 
                     break;
 
@@ -230,7 +230,7 @@ public class App
     }
 
     // Logic for importing graph from .DOT file
-    public static String parseGraph(String filePath, Graph<String, DefaultEdge> gr) {
+    public static String importGraph(String filePath, Graph<String, DefaultEdge> gr) {
 
         //Create Importer for file
         DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
