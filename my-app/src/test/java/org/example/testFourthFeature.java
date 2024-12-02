@@ -16,7 +16,7 @@ public class testFourthFeature {
 
         importGraph("src/dot files/graph1.dot", graph);
 
-        assertEquals("Exported file successfully!", outputDOTGraph(graph));
+        assertEquals("Exported file successfully!", fileOutputDOTGraph(graph));
     }
 
 
