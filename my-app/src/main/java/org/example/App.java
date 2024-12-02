@@ -42,8 +42,6 @@ public class App
         //control variable for command loop
         boolean running = true;
 
-    
-
         printCommandOptions();
 
         while (running) {
@@ -86,12 +84,10 @@ public class App
 
                     System.out.println(addEdgeToGraph(vertexA, vertexB, graph));
 
-
                     break;
 
                 case "D":
                     System.out.println("You chose: Export graph into image\n");
-
 
                     System.out.println("Enter file path to .DOT file: ");
                     userInput = scanner.nextLine();
@@ -147,7 +143,6 @@ public class App
                     break;
 
                 case "J":
-
                     System.out.println("Please enter the nodes in which you want to find the path to: (You will be prompted for two inputs and select the algorithm)\n");
 
                     System.out.println("Please enter the src node:");
@@ -210,8 +205,7 @@ public class App
                 if (currentNode.equals(dst.getLabel())) {
                     return path;
                 }
-            
-        }
+            }
         }
 
         return path;
@@ -321,7 +315,6 @@ public class App
         } catch (ExportException | IOException e) {
             return ("Failed to export to file. Please check file path.");
         }
-
     }
 
     //Logic for adding a node
@@ -367,7 +360,6 @@ public class App
             try {
 
                 Graphviz.fromFile(dotFile).width(700).render(Format.PNG).toFile(pngFile);
-                //Graphviz.fromGraph(graph).width(700).render(Format.PNG).toFile(pngFile);
 
                 return("PNG file generated successfully!");
             } catch (IOException e) {
@@ -377,7 +369,6 @@ public class App
         } else  {
             return("File not Found.");
         }
-
     }
 
     public static String addEdgeToGraph(String vA, String vB, Graph<String, DefaultEdge> gr) {
