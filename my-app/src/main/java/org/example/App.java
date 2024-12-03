@@ -26,10 +26,10 @@ import java.util.*;
 
 public class App
 {
-    enum Algo {
-        BFS,
-        DFS
-    }
+//    enum Algo {
+//        BFS,
+//        DFS
+//    }
 
     public static void main(String[] args)
     {
@@ -143,18 +143,8 @@ public class App
                     break;
 
                 case "J":
-                    System.out.println("Choose an algorithm to search for the path BFS(1) or DFS(2):");
-                    String algorithmChoice = scanner.nextLine();
-
-                    if (algorithmChoice.equals("1")) {
-                        GraphSearchTemplate gs = new BFS();
-                        gs.searchGraph(graph);
-                    } else if (algorithmChoice.equals("2")) {
-                        GraphSearchTemplate gs = new DFS();
-                        gs.searchGraph(graph);
-                    } else {{
-                        System.out.println("Please enter a valid option.\n");
-                    }}
+                    GraphSearchTemplate call = new Algorithms();
+                    call.searchGraph(graph);
 
                     break;
 
@@ -174,37 +164,37 @@ public class App
     }
 
     //Implementing BFS with path return
-    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr, Algo choice) {
-        CustomPath path = new CustomPath();
-
-        if (choice == Algo.BFS) {
-            //Instantiate object for BFS
-            BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
-
-            //Give me path in form of a list
-            List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
-
-            for (String item : pathToDST) {
-                path.addNode(new Node(item));
-            }
-        }
-            
-        if (choice == Algo.DFS) {
-            DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
-    
-            while (dfsIterator.hasNext()) {
-                String currentNode = dfsIterator.next();
-                path.addNode(new Node(currentNode));
-    
-                // If the goal node is reached, break out
-                if (currentNode.equals(dst.getLabel())) {
-                    return path;
-                }
-            }
-        }
-
-        return path;
-    }
+//    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr, Algo choice) {
+//        CustomPath path = new CustomPath();
+//
+//        if (choice == Algo.BFS) {
+//            //Instantiate object for BFS
+//            BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
+//
+//            //Give me path in form of a list
+//            List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
+//
+//            for (String item : pathToDST) {
+//                path.addNode(new Node(item));
+//            }
+//        }
+//
+//        if (choice == Algo.DFS) {
+//            DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
+//
+//            while (dfsIterator.hasNext()) {
+//                String currentNode = dfsIterator.next();
+//                path.addNode(new Node(currentNode));
+//
+//                // If the goal node is reached, break out
+//                if (currentNode.equals(dst.getLabel())) {
+//                    return path;
+//                }
+//            }
+//        }
+//
+//        return path;
+//    }
 
     //print function for graphsString
     public static void printGraphInfo(Graph<String, DefaultEdge> gr) {
@@ -411,6 +401,10 @@ public class App
 //Template Method Implementation
 abstract class GraphSearchTemplate {
 
+    public enum Algo {
+        BFS,
+        DFS
+    }
     public final void searchGraph(Graph<String, DefaultEdge> gr) {
         //prompt src node
         Node src = promptSrcNode();
@@ -418,20 +412,23 @@ abstract class GraphSearchTemplate {
         //prompt dst node
         Node dst = promptDstNode();
 
-        //prompt algorithm later commit
+        //prompt algorithm
+        Algo algo = Algo.valueOf(promptSearchAlgo());
+
 
         //implement search algo
-        System.out.println(search(src, dst, gr));
+        System.out.println(search(src, dst, algo,gr));
     }
 
     //abstract methods for diff search algorithms
-    abstract CustomPath search(Node src, Node dst, Graph<String, DefaultEdge> gr);
+    abstract CustomPath search(Node src, Node dst, Algo a, Graph<String, DefaultEdge> gr);
 
     //common method
     public Node promptSrcNode() {
         Node srcNode;
         System.out.println("Enter source node:\n");
         Scanner scanner = new Scanner(System.in);
+
         return srcNode = new Node(scanner.nextLine());
     }
 
@@ -439,16 +436,38 @@ abstract class GraphSearchTemplate {
         Node dstNode;
         System.out.println("Enter destination node:\n");
         Scanner scanner = new Scanner(System.in);
+
         return dstNode = new Node(scanner.nextLine());
+    }
+
+    public String promptSearchAlgo() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choose an algorithm to search for the path, 'BFS' or 'DFS':");
+        String algorithmChoice = scanner.nextLine().trim().toUpperCase();
+
+        return algorithmChoice;
     }
 }
 
 //Abstract Implementations
 
-//Implements BFS search
-class BFS extends GraphSearchTemplate {
+//Implements Searchs based on parameter inputs
+class Algorithms extends GraphSearchTemplate {
+
     @Override
-    CustomPath search(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+    CustomPath search(Node src, Node dst, Algo a,Graph<String, DefaultEdge> gr) {
+        switch (a) {
+            case BFS:
+                return BFS(src, dst, gr);
+            case DFS:
+                return DFS(src, dst, gr);
+            default:
+                throw new IllegalArgumentException("Unsupported algorithm: " + a);
+        }
+    }
+
+    private CustomPath BFS(Node src, Node dst, Graph<String, DefaultEdge> gr) {
         CustomPath path = new CustomPath();
 
         //Instantiate object for BFS
@@ -463,12 +482,8 @@ class BFS extends GraphSearchTemplate {
 
         return path;
     }
-}
 
-//Implements DFS Search
-class DFS extends GraphSearchTemplate {
-    @Override
-    CustomPath search(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+    private CustomPath DFS(Node src, Node dst, Graph<String, DefaultEdge> gr) {
         CustomPath path  = new CustomPath();
         DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
 
@@ -485,3 +500,24 @@ class DFS extends GraphSearchTemplate {
         return path;
     }
 }
+
+////Implements DFS Search
+//class DFS extends GraphSearchTemplate {
+//    @Override
+//    CustomPath search(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+//        CustomPath path  = new CustomPath();
+//        DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
+//
+//        while (dfsIterator.hasNext()) {
+//            String currentNode = dfsIterator.next();
+//            path.addNode(new Node(currentNode));
+//
+//            // If the goal node is reached, break out
+//            if (currentNode.equals(dst.getLabel())) {
+//                return path;
+//            }
+//        }
+//
+//        return path;
+//    }
+//}
