@@ -413,7 +413,7 @@ abstract class GraphSearchTemplate {
     public String promptSearchAlgo() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Choose an algorithm to search for the path, 'BFS' or 'DFS':");
+        System.out.println("Choose an algorithm to search for the path, 'BFS', 'DFS', or 'RAND':");
         String algorithmChoice = scanner.nextLine().trim().toUpperCase();
 
         return algorithmChoice;
