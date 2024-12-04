@@ -163,39 +163,6 @@ public class App
         scanner.close();
     }
 
-    //Implementing BFS with path return
-//    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr, Algo choice) {
-//        CustomPath path = new CustomPath();
-//
-//        if (choice == Algo.BFS) {
-//            //Instantiate object for BFS
-//            BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
-//
-//            //Give me path in form of a list
-//            List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
-//
-//            for (String item : pathToDST) {
-//                path.addNode(new Node(item));
-//            }
-//        }
-//
-//        if (choice == Algo.DFS) {
-//            DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
-//
-//            while (dfsIterator.hasNext()) {
-//                String currentNode = dfsIterator.next();
-//                path.addNode(new Node(currentNode));
-//
-//                // If the goal node is reached, break out
-//                if (currentNode.equals(dst.getLabel())) {
-//                    return path;
-//                }
-//            }
-//        }
-//
-//        return path;
-//    }
-
     //print function for graphsString
     public static void printGraphInfo(Graph<String, DefaultEdge> gr) {
         System.out.println(
@@ -398,12 +365,15 @@ public class App
 }
 
 
+
+
 //Template Method Implementation
 abstract class GraphSearchTemplate {
 
     public enum Algo {
         BFS,
-        DFS
+        DFS,
+        RAND
     }
     public final void searchGraph(Graph<String, DefaultEdge> gr) {
         //prompt src node
@@ -453,7 +423,7 @@ abstract class GraphSearchTemplate {
 //Abstract Implementations
 
 //Implements Searchs based on parameter inputs
-class Algorithms extends GraphSearchTemplate {
+    class Algorithms extends GraphSearchTemplate {
 
     @Override
     CustomPath search(Node src, Node dst, Algo a,Graph<String, DefaultEdge> gr) {
@@ -462,6 +432,8 @@ class Algorithms extends GraphSearchTemplate {
                 return BFS(src, dst, gr);
             case DFS:
                 return DFS(src, dst, gr);
+            case RAND:
+                return randomWalk(src,dst,gr);
             default:
                 throw new IllegalArgumentException("Unsupported algorithm: " + a);
         }
@@ -499,25 +471,37 @@ class Algorithms extends GraphSearchTemplate {
 
         return path;
     }
-}
 
-////Implements DFS Search
-//class DFS extends GraphSearchTemplate {
-//    @Override
-//    CustomPath search(Node src, Node dst, Graph<String, DefaultEdge> gr) {
-//        CustomPath path  = new CustomPath();
-//        DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
-//
-//        while (dfsIterator.hasNext()) {
-//            String currentNode = dfsIterator.next();
-//            path.addNode(new Node(currentNode));
-//
-//            // If the goal node is reached, break out
-//            if (currentNode.equals(dst.getLabel())) {
-//                return path;
-//            }
-//        }
-//
-//        return path;
-//    }
-//}
+    private CustomPath randomWalk(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+        Node currentNode = src;
+        CustomPath path = new CustomPath();
+        path.addNode(currentNode);
+
+        Random rand = new Random();
+
+        int maxStep = 100;
+        int steps = 0;
+
+        while(steps < maxStep) {
+            if (currentNode.getLabel().equals(dst.getLabel())) {
+                return path;
+            }
+
+            // Get neighbors (edges from the current node)
+            List<DefaultEdge> neighbors = List.copyOf(gr.outgoingEdgesOf(currentNode.getLabel()));
+
+            if (neighbors.isEmpty()) {
+                // Out of edges
+                break;
+            }
+
+            // Pick a random edge and get its target
+            DefaultEdge randomEdge = neighbors.get(rand.nextInt(neighbors.size()));
+            currentNode = new Node(gr.getEdgeTarget(randomEdge)); // Get the target vertex of the edge
+            path.addNode(currentNode);
+            steps++;
+        }
+
+        return path;
+    }
+}
