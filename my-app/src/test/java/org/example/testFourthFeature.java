@@ -14,9 +14,9 @@ public class testFourthFeature {
     public void checkOutputDOTGraph() {
         Graph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
 
-        parseGraph("src/dot files/graph1.dot", graph);
+        importGraph("src/dot files/graph1.dot", graph);
 
-        assertEquals("Exported file successfully!", outputDOTGraph(graph));
+        assertEquals("Exported file successfully!", fileOutputDOTGraph(graph));
     }
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="org.example.AppTest" time="0.001" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="org.example.AppTest" time="0.002" errors="0" skipped="0">
   <properties>
     <property name="jansi.mode" value="force"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -33,7 +33,7 @@
     <property name="java.class.version" value="67.0"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="os.version" value="6.8.0-47-generic"/>
+    <property name="os.version" value="6.8.0-49-generic"/>
     <property name="library.jansi.path" value="/usr/share/maven/lib/jansi-native"/>
     <property name="user.home" value="/home/gomezjulian1604"/>
     <property name="user.timezone" value="America/Phoenix"/>
@@ -58,5 +58,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.endian" value="little"/>
   </properties>
-  <testcase classname="org.example.AppTest" name="testApp" time="0.001"/>
+  <testcase classname="org.example.AppTest" name="testApp" time="0.002"/>
 </testsuite>

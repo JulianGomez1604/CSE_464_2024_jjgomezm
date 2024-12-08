@@ -26,12 +26,12 @@ import java.util.*;
 
 public class App
 {
-    enum Algo {
-        BFS,
-        DFS
-    }
+//    enum Algo {
+//        BFS,
+//        DFS
+//    }
 
-    public static void main( String[] args )
+    public static void main(String[] args)
     {
         //Creation of Graph for later use
         Graph<String, DefaultEdge> graph = new DirectedMultigraph<>(DefaultEdge.class);
@@ -41,8 +41,6 @@ public class App
 
         //control variable for command loop
         boolean running = true;
-
-    
 
         printCommandOptions();
 
@@ -58,7 +56,7 @@ public class App
                     System.out.println("Please input your file path:\n");
                     userInput = scanner.nextLine();
 
-                    System.out.println(parseGraph(userInput, graph));
+                    System.out.println(importGraph(userInput, graph));
 
                     break;
 
@@ -86,12 +84,10 @@ public class App
 
                     System.out.println(addEdgeToGraph(vertexA, vertexB, graph));
 
-
                     break;
 
                 case "D":
                     System.out.println("You chose: Export graph into image\n");
-
 
                     System.out.println("Enter file path to .DOT file: ");
                     userInput = scanner.nextLine();
@@ -103,7 +99,7 @@ public class App
                 case "E":
                     System.out.println("You chose: Export graph into .DOT file");
                     // Logic for exporting graph into a .DOT file
-                    System.out.println(outputDOTGraph(graph));
+                    System.out.println(fileOutputDOTGraph(graph));
 
                     break;
 
@@ -147,25 +143,9 @@ public class App
                     break;
 
                 case "J":
+                    GraphSearchTemplate call = new Algorithms();
+                    call.searchGraph(graph);
 
-                    System.out.println("Please enter the nodes in which you want to find the path to: (You will be prompted for two inputs and select the algorithm)\n");
-
-                    System.out.println("Please enter the src node:");
-                    Node srcNode = new Node(scanner.nextLine());
-
-                    System.out.println("Please enter dst node:");
-                    Node dstNode = new Node(scanner.nextLine());
-
-                    System.out.println("Choose an algorithm to search for the path BFS(1) or DFS(2):");
-                    String algorithmChoice = scanner.nextLine();
-
-                    if (algorithmChoice.equals("1")) {
-                        System.out.println(GraphSearch(srcNode, dstNode, graph, Algo.BFS).toString());
-                    }else if (algorithmChoice.equals("2")) {
-                        System.out.println(GraphSearch(srcNode, dstNode, graph, Algo.DFS).toString());
-                    } else {
-                        System.out.println("Please enter a one of two algorithm choices.");
-                    }
                     break;
 
                 case "Q":
@@ -183,51 +163,20 @@ public class App
         scanner.close();
     }
 
-    //Implementing BFS with path return
-    public static CustomPath GraphSearch(Node src, Node dst, Graph<String, DefaultEdge> gr, Algo choice) {
-        CustomPath path = new CustomPath();
-
-        if (choice == Algo.BFS) {
-            //Instantiate object for BFS
-            BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
-
-            //Give me path in form of a list
-            List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
-
-            for (String item : pathToDST) {
-                path.addNode(new Node(item));
-            }
-        }
-            
-        if (choice == Algo.DFS) {
-            DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
-    
-            while (dfsIterator.hasNext()) {
-                String currentNode = dfsIterator.next();
-                path.addNode(new Node(currentNode));
-    
-                // If the goal node is reached, break out
-                if (currentNode.equals(dst.getLabel())) {
-                    return path;
-                }
-            
-        }
-        }
-
-        return path;
-    }
-
-    //print function for graphs
+    //print function for graphsString
     public static void printGraphInfo(Graph<String, DefaultEdge> gr) {
         System.out.println(
-                "Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)])  \n " +
-                "(vertex1, vertex2) == vertex1 -> vertex2\n");
+                """
+                        Format: ([vertex1, vertex2,...], [(vertex1, vertex2), (vertex2, vertex1)]) \s
+                         \
+                        (vertex1, vertex2) == vertex1 -> vertex2
+                        """);
         System.out.println(gr + "\n" +
                 "Number of Nodes: " + gr.vertexSet().size() +"\n------------------------------\n");
     }
 
     // Logic for importing graph from .DOT file
-    public static String parseGraph(String filePath, Graph<String, DefaultEdge> gr) {
+    public static String importGraph(String filePath, Graph<String, DefaultEdge> gr) {
 
         //Create Importer for file
         DOTImporter<String, DefaultEdge> importer = new DOTImporter<>();
@@ -307,7 +256,7 @@ public class App
     }
 
     //Logic for exporting graph to file
-    public static String outputDOTGraph(Graph<String, DefaultEdge> gr){
+    public static String fileOutputDOTGraph(Graph<String, DefaultEdge> gr){
         //Exporter for graph
         DOTExporter<String, DefaultEdge> exporter = new DOTExporter<>(v -> v);
 
@@ -318,7 +267,6 @@ public class App
         } catch (ExportException | IOException e) {
             return ("Failed to export to file. Please check file path.");
         }
-
     }
 
     //Logic for adding a node
@@ -364,7 +312,6 @@ public class App
             try {
 
                 Graphviz.fromFile(dotFile).width(700).render(Format.PNG).toFile(pngFile);
-                //Graphviz.fromGraph(graph).width(700).render(Format.PNG).toFile(pngFile);
 
                 return("PNG file generated successfully!");
             } catch (IOException e) {
@@ -374,7 +321,6 @@ public class App
         } else  {
             return("File not Found.");
         }
-
     }
 
     public static String addEdgeToGraph(String vA, String vB, Graph<String, DefaultEdge> gr) {
@@ -400,17 +346,162 @@ public class App
 
     //Function to print User Menu
     public static void printCommandOptions() {
-                System.out.println("Command Line Options: \n" +
-                "\tA: Import graph from .DOT file\n" +
-                "\tB: Add node to graph\n" +
-                "\tC: Add edge to graph\n" +
-                "\tD: Export graph into image\n" +
-                "\tE: Export graph into .DOT file\n" +
-                "\tF: Print Graph String Format\n" +
-                "\tG: Remove Single Node\n" +
-                "\tH: Remove Multiple Node\n" +
-                "\tI: Remove Edge\n" +
-                "\tJ: Find Path using BFS or DFS\n" +
-                "\tQ: Quit Program\n\n");
+                System.out.println("""
+                        Command Line Options:\s
+                        \tA: Import graph from .DOT file
+                        \tB: Add node to graph
+                        \tC: Add edge to graph
+                        \tD: Export graph into image
+                        \tE: Export graph into .DOT file
+                        \tF: Print Graph String Format
+                        \tG: Remove Single Node
+                        \tH: Remove Multiple Node
+                        \tI: Remove Edge
+                        \tJ: Find Path using BFS or DFS
+                        \tQ: Quit Program
+                        
+                        """);
+    }
+}
+
+
+
+
+//Template Method Implementation
+abstract class GraphSearchTemplate {
+
+    public enum Algo {
+        BFS,
+        DFS,
+        RAND
+    }
+    public final void searchGraph(Graph<String, DefaultEdge> gr) {
+        //prompt src node
+        Node src = promptSrcNode();
+
+        //prompt dst node
+        Node dst = promptDstNode();
+
+        //prompt algorithm
+        Algo algo = Algo.valueOf(promptSearchAlgo());
+
+
+        //implement search algo
+        System.out.println(search(src, dst, algo,gr));
+    }
+
+    //abstract methods for diff search algorithms
+    abstract CustomPath search(Node src, Node dst, Algo a, Graph<String, DefaultEdge> gr);
+
+    //common method
+    public Node promptSrcNode() {
+        Node srcNode;
+        System.out.println("Enter source node:\n");
+        Scanner scanner = new Scanner(System.in);
+
+        return srcNode = new Node(scanner.nextLine());
+    }
+
+    public Node promptDstNode() {
+        Node dstNode;
+        System.out.println("Enter destination node:\n");
+        Scanner scanner = new Scanner(System.in);
+
+        return dstNode = new Node(scanner.nextLine());
+    }
+
+    public String promptSearchAlgo() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choose an algorithm to search for the path, 'BFS', 'DFS', or 'RAND':");
+        String algorithmChoice = scanner.nextLine().trim().toUpperCase();
+
+        return algorithmChoice;
+    }
+}
+
+//Abstract Implementations
+
+//Implements Searchs based on parameter inputs
+    class Algorithms extends GraphSearchTemplate {
+
+    @Override
+    CustomPath search(Node src, Node dst, Algo a,Graph<String, DefaultEdge> gr) {
+        switch (a) {
+            case BFS:
+                return BFS(src, dst, gr);
+            case DFS:
+                return DFS(src, dst, gr);
+            case RAND:
+                return randomWalk(src,dst,gr);
+            default:
+                throw new IllegalArgumentException("Unsupported algorithm: " + a);
+        }
+    }
+
+    private CustomPath BFS(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+        CustomPath path = new CustomPath();
+
+        //Instantiate object for BFS
+        BFSShortestPath<String, DefaultEdge> bfsShortestPath = new BFSShortestPath<>(gr);
+
+        //Give me path in form of a list
+        List<String> pathToDST = bfsShortestPath.getPath(src.getLabel(), dst.getLabel()).getVertexList();
+
+        for (String item : pathToDST) {
+            path.addNode(new Node(item));
+        }
+
+        return path;
+    }
+
+    private CustomPath DFS(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+        CustomPath path  = new CustomPath();
+        DepthFirstIterator<String, DefaultEdge> dfsIterator = new DepthFirstIterator<String, DefaultEdge>(gr, src.getLabel());
+
+        while (dfsIterator.hasNext()) {
+            String currentNode = dfsIterator.next();
+            path.addNode(new Node(currentNode));
+
+            // If the goal node is reached, break out
+            if (currentNode.equals(dst.getLabel())) {
+                return path;
+            }
+        }
+
+        return path;
+    }
+
+    private CustomPath randomWalk(Node src, Node dst, Graph<String, DefaultEdge> gr) {
+        Node currentNode = src;
+        CustomPath path = new CustomPath();
+        path.addNode(currentNode);
+
+        Random rand = new Random();
+
+        int maxStep = 100;
+        int steps = 0;
+
+        while(steps < maxStep) {
+            if (currentNode.getLabel().equals(dst.getLabel())) {
+                return path;
+            }
+
+            // Get neighbors (edges from the current node)
+            List<DefaultEdge> neighbors = List.copyOf(gr.outgoingEdgesOf(currentNode.getLabel()));
+
+            if (neighbors.isEmpty()) {
+                // Out of edges
+                break;
+            }
+
+            // Pick a random edge and get its target
+            DefaultEdge randomEdge = neighbors.get(rand.nextInt(neighbors.size()));
+            currentNode = new Node(gr.getEdgeTarget(randomEdge)); // Get the target vertex of the edge
+            path.addNode(currentNode);
+            steps++;
+        }
+
+        return path;
     }
 }
